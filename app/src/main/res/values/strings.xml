@@ -1,3 +1,8 @@
 <resources>
   <string name="app_name">mvvm</string>
+    <string name="add_user">add user</string>
+  <string name="add_remote_users">Add remote users</string>
+  <string name="name">Name</string>
+  <string name="password">Password</string>
+  <string name="clear_users">clear users</string>
 </resources>

@@ -2,6 +2,7 @@ package com.pedro.mvvm.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pedro.mvvm.databinding.UserItemBinding
 import com.pedro.mvvm.model.User
@@ -23,10 +24,12 @@ class UsersAdapter : RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
 
     fun addUsers(users: List<User>) {
         items.addAll(users)
+        notifyDataSetChanged()
     }
 
     fun clearUsers() {
         items.clear()
+        notifyDataSetChanged()
     }
 
     class ViewHolder(private val userItemBinding: UserItemBinding) :

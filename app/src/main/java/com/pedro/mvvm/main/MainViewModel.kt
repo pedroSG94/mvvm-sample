@@ -8,6 +8,7 @@ import com.pedro.mvvm.task.DataBaseRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class MainViewModel @ViewModelInject constructor(
     private val dataBaseRepository: DataBaseRepository,
@@ -15,6 +16,8 @@ class MainViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     val usersObserver = MutableLiveData<List<User>>()
+    val errorObserver = MutableLiveData<String>()
+
     private val observer = Observer<List<User>> {
         usersObserver.value = it
     }
@@ -28,11 +31,17 @@ class MainViewModel @ViewModelInject constructor(
      */
     fun addOnlineUsers() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                apiRestRepository.getUsers().forEach {
-                    addUser(it.user, it.password)
+            val result = withContext(Dispatchers.IO) {
+                try {
+                    apiRestRepository.getUsers().forEach {
+                        addUser(it.user, it.password)
+                    }
+                    ""
+                } catch (e: Exception) {
+                    e.message ?: "unknown error"
                 }
             }
+            if (result.isNotEmpty()) errorObserver.value = result
         }
     }
 
@@ -41,9 +50,13 @@ class MainViewModel @ViewModelInject constructor(
      */
     fun addUser(user: String, password: String) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                dataBaseRepository.insertUser(User(user, password))
+            val result = withContext(Dispatchers.IO) {
+                if (user.isNotEmpty() && password.isNotEmpty()) {
+                    dataBaseRepository.insertUser(User(user, password))
+                    true
+                } else false
             }
+            if (!result) errorObserver.value = "name or password is empty"
         }
     }
 

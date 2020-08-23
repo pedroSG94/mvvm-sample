@@ -22,28 +22,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         ActivityMainBinding.inflate(layoutInflater).apply {
             setContentView(root)
+            viewModel = mainViewModel
+            lifecycleOwner = this@MainActivity
+
             rvUsers.adapter = adapter
-            mainViewModel.usersObserver.observe(this@MainActivity, Observer {
-                if (it.isEmpty()) adapter.clearUsers()
-                adapter.addUsers(it)
-                adapter.notifyDataSetChanged()
+            //return error from viewModel and show in screen
+            mainViewModel.errorObserver.observe(this@MainActivity, Observer {
+                toast(it)
             })
-
-            bAddUser.setOnClickListener {
-                if (etName.text.isNotEmpty() && etPassword.text.isNotEmpty()) {
-                    mainViewModel.addUser(etName.text.toString(), etPassword.text.toString())
-                } else {
-                    toast("Name or password is empty")
-                }
-            }
-
-            bRemoteUsers.setOnClickListener {
-                mainViewModel.addOnlineUsers()
-            }
-
-            bclearUsers.setOnClickListener {
-                mainViewModel.clearUsers()
-            }
         }
     }
 }

@@ -1,54 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".main.MainActivity"
-    android:orientation="vertical"
-    android:layout_margin="16dp"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
-  <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/rvUsers"
-      android:layout_width="match_parent"
-      android:layout_height="300dp"
-      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-      />
+    <data>
+        <variable
+            name="viewModel"
+            type="com.pedro.mvvm.main.MainViewModel" />
+    </data>
 
-  <Button
-      android:layout_gravity="center"
-      android:id="@+id/bRemoteUsers"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Add remote users"
-      />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        tools:context=".main.MainActivity">
 
-  <Button
-      android:layout_gravity="center"
-      android:id="@+id/bAddUser"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="add user"
-      />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvUsers"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:items="@{ viewModel.usersObserver }"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            />
 
-  <EditText
-      android:id="@+id/et_name"
-      android:hint="Name"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/bRemoteUsers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/add_remote_users"
+            android:onClick="@{() -> viewModel.addOnlineUsers()}"
+            />
 
-  <EditText
-      android:id="@+id/et_password"
-      android:hint="Password"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/bAddUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/add_user"
+            android:onClick="@{() -> viewModel.addUser(etName.getText().toString(), etPassword.getText().toString())}"
+            />
 
-  <Button
-      android:layout_gravity="center"
-      android:id="@+id/bclearUsers"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="clear users"
-      />
-</LinearLayout>
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/name"
+            android:hint="@string/name"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/password"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/bClearUsers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/clear_users"
+            android:onClick="@{() -> viewModel.clearUsers()}"
+            />
+    </LinearLayout>
+</layout>
