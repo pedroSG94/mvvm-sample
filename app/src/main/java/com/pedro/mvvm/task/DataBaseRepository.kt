@@ -1,52 +1,21 @@
 package com.pedro.mvvm.task
 
 import androidx.lifecycle.Observer
-import com.pedro.mvvm.data.db.MyDataBase
-import com.pedro.mvvm.data.db.entity.UserEntity
 import com.pedro.mvvm.model.User
-import com.pedro.mvvm.toUser
-import com.pedro.mvvm.toUserEntity
 
-class DataBaseRepository(private val db: MyDataBase) {
+interface DataBaseRepository {
 
-    private var observerUser: Observer<List<User>>? = null
+    suspend fun insertUser(user: User)
 
-    private var observer = Observer<List<UserEntity>> { users ->
-        val result = users.map { it.toUser() }
-        observerUser?.onChanged(result)
-    }
+    suspend fun deleteUser(user: User)
 
-    suspend fun insertUser(user: User) {
-        val u = user.toUserEntity()
-        db.userDao().insert(u)
-    }
+    suspend fun updateUser(user: User)
 
-    suspend fun deleteUser(user: User) {
-        val u = user.toUserEntity()
-        db.userDao().delete(u)
-    }
+    suspend fun getUsers(): List<User>
 
-    suspend fun updateUser(user: User) {
-        val u = user.toUserEntity()
-        db.userDao().update(u)
-    }
+    suspend fun clearUsers()
 
-    suspend fun getUsers(): List<User> {
-        val users = db.userDao().getAll()
-        return users.map { it.toUser() }
-    }
+    fun startObserveUsers(observerUser: Observer<List<User>>)
 
-    suspend fun clearUsers() {
-        db.userDao().clearTable()
-    }
-
-    fun startObserveUsers(observerUser: Observer<List<User>>) {
-        this.observerUser = observerUser
-        db.userDao().observeAll().observeForever(observer)
-    }
-
-    fun stopObserveUsers() {
-        db.userDao().observeAll().removeObserver(this.observer)
-        observerUser = null
-    }
+    fun stopObserveUsers()
 }

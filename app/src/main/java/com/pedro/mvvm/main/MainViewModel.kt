@@ -11,7 +11,8 @@ import kotlinx.coroutines.withContext
 
 class MainViewModel @ViewModelInject constructor(
     private val dataBaseRepository: DataBaseRepository,
-    private val apiRestRepository: ApiRestRepository) : ViewModel() {
+    private val apiRestRepository: ApiRestRepository
+) : ViewModel() {
 
     val usersObserver = MutableLiveData<List<User>>()
     private val observer = Observer<List<User>> {
