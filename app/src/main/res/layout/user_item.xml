@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
+        <variable
+            name="user"
+            type="com.pedro.mvvm.model.User" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -9,12 +15,16 @@
         <TextView
             android:id="@+id/tvUser"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@{ user.user }"
+            />
 
         <TextView
             android:id="@+id/tvPassword"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@{ user.password }"
+            />
 
         <View
             android:layout_width="match_parent"

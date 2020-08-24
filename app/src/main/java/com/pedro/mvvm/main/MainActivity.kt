@@ -30,6 +30,12 @@ class MainActivity : AppCompatActivity() {
             mainViewModel.errorObserver.observe(this@MainActivity, Observer {
                 toast(it)
             })
+
+            mainViewModel.usersObserver.observe(this@MainActivity, Observer {
+                it?.let {
+                    adapter.submitList(it)
+                }
+            })
         }
     }
 }

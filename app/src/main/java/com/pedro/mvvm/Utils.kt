@@ -16,7 +16,7 @@ fun Activity.toast(message: String) {
 /**
  * Mappers
  */
-fun UserEntity.toUser(): User = User(this.user, this.password)
+fun UserEntity.toUser(): User = User(this.user, this.password, this.id)
 
 fun User.toUserEntity(): UserEntity = UserEntity(this.user, this.password)
 
@@ -25,13 +25,5 @@ fun User.toApiRestUser(): ApiRestUser = ApiRestUser(this.user, this.password)
 fun ApiRestUser.toUser(): User = User(this.name, this.email)
 
 /**
- * Customs binding
+ * For customs binding use a fun with @BindingAdapter("items")
  */
-@BindingAdapter("items")
-fun RecyclerView.addUsers(items: List<User>?) {
-    items?.let {
-        (adapter as? UsersAdapter)?.clearUsers()
-        (adapter as? UsersAdapter)?.addUsers(it)
-        adapter?.notifyDataSetChanged()
-    }
-}

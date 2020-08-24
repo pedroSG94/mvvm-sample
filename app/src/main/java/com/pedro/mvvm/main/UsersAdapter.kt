@@ -2,42 +2,40 @@ package com.pedro.mvvm.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pedro.mvvm.databinding.UserItemBinding
 import com.pedro.mvvm.model.User
 
-class UsersAdapter : RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
-
-    private val items = arrayListOf<User>()
+class UsersAdapter : ListAdapter<User, UsersAdapter.ViewHolder>(UserDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = UserItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = items.size
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
-    }
-
-    fun addUsers(users: List<User>) {
-        items.addAll(users)
-        notifyDataSetChanged()
-    }
-
-    fun clearUsers() {
-        items.clear()
-        notifyDataSetChanged()
+        val item = getItem(position)
+        holder.bind(item)
     }
 
     class ViewHolder(private val userItemBinding: UserItemBinding) :
         RecyclerView.ViewHolder(userItemBinding.root) {
 
         fun bind(user: User) {
-            userItemBinding.tvUser.text = user.user
-            userItemBinding.tvPassword.text = user.password
+            userItemBinding.user = user
+            userItemBinding.executePendingBindings()
+        }
+    }
+
+    class UserDiffCallback: DiffUtil.ItemCallback<User>() {
+        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+            return oldItem.id == newItem.id
         }
     }
 }
